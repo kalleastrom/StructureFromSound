@@ -1,0 +1,58 @@
+<html>
+<head>
+  <title>Kalle Astrom, Structure from Sound Database (sfsdb)</title>
+  <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+</head>
+
+<H2> Structure from Sound Database (sfsdb)</H2>
+
+<body>
+
+<p>
+Here is a database of multi-channel recordings to be used for 'structure from sound' experiments. 
+Each experiment consists of a number of audio files, typically 8, one for each microphone. 
+In each experiment the microphones are stationary, but in unknown position. 
+
+
+<ol>
+<li>  Download the matlab code from <a href="https://github.com/kalleastrom/StructureFromSound"> https://github.com/kalleastrom/StructureFromSound </a>
+<li>  The folder structure should be:
+<ul>
+<li>  StructureFromSound
+<ul>
+<li>  matlab 
+<ul>
+<li>  main.m 
+<li>  other matlab code and folders 
+</ul>
+<li>  data 
+<ul>
+<li>  savefiles (this folder is used to save intermediate results)
+<li>  sfsgt  (this folder contains ground truth for experiments)
+<li>  sfsdb (this folder should contain the experiments you want to try. However, this folder is empty when you download it from github)
+<ul>
+<li>  bassh1 (one experiment folder containing 8 sound files)
+<ul>
+<li>  bassh1-1.aiff
+<li>  bassh1-2.aiff
+<li>  ...
+<li>  bassh1-8.aiff
+</ul>
+<li>  bassh2 (another experiment folder containing 8 sound files)
+<li>  bassh3 
+<li>  ...
+</ul>
+</ul>
+<li>  tex 
+<ul>
+<li>  StructureFromSound.tex (tex file explaining some of the math and algorithms)
+</ul>
+</ul>
+</ul>
+<li>  Download the raw sound files from this site <a href="http://vision.maths.lth.se/sfsdb/"> http://vision.maths.lth.se/sfsdb/ </a>
+and put the each experiment folder in the folder sfsdb so that you get the right file structure.
+<li>  Run main.m 
+</ol>
+
+</body>
+</html>
