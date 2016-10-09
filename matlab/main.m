@@ -1,10 +1,13 @@
 %% Main System Script
+% 
 
 %% set system specific paths in a separate script
 % Don't do this in this script. Run the script separately or in startup.m
 % so that this script works for everyone.
-%set_localpaths
+% set_localpaths
 
+tdoasystemsettings.multipolpath = '/Users/kalle/Documents/projekt/github/multipol/';
+tdoasystemsettings.datapath = '/Users/kalle/Documents/projekt/github/StructureFromSound/data/';
 
 %% add paths
 
@@ -20,10 +23,10 @@ addpath tools
 % Some settings are needed for file read and for setting up where temporary
 % files will be saved.
 
-[a,settings]=read_from_sfsdb(tdoasystemsettings,3); % Choose dataset here.
-savedirname = 'data_3_system_2';                    % Remember to change savefolderpath, so
+[a,settings]=read_from_sfsdb(tdoasystemsettings,12); % Choose dataset here.
+savedirname = 'tmp';                    % Remember to change savefolderpath, so
                                                     % that you don't
-                                                    % overwrite olderr
+                                                    % overwrite older
                                                     % results
 settings.saveDir = [tdoasystemsettings.datapath 'savefiles' filesep savedirname filesep];
 settings.gtDir = [tdoasystemsettings.datapath 'sfsgt' filesep settings.foldername filesep];
@@ -42,12 +45,15 @@ if exist(settings.gtDir,'dir'),
     end
 end
 
-% Här skulle man nog sätta saker som
-% är mikrofonerna i 3D eller i ett plan
-% är det ett kontinuerligt ljud eller klapp
-% är det en ljudkälla eller flera olika samtidigt
-% är det en distinkt ljudkälla eller utbredd
-% är det ett ekofritt rum eller inte
+% Maybe we should supply additional information here
+% in the settings
+% such as
+% are the microphones in a plane or on a line
+% are the sound events in a plane or on a line
+% are the sound events continuous or discrete
+% are the sound sources point-like or spread out
+% is the room anaechoic or not
+
 
 %% Run a system on the data
 %settings for output
@@ -65,3 +71,4 @@ else
     plot_result(result);
 end
 
+%   Copyright 2013-2016, Kalle Åström

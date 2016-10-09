@@ -1,6 +1,9 @@
 function [speglingar,spegelplan]=finding_multipath_components(fres,fmatches,scores,settings);
 % Try to estimate mirrored receivers. Experimental
 
+%% plot debug
+doplot = 0;
+
 %% load in some data
 %load fresfmatchesscores
 speglingar = [];
@@ -28,8 +31,10 @@ for channelMirrorSearch = 1:8;
     % Generate data for ransac
     d1 = sqrt( sum( (y-repmat(x(:,channelMirrorSearch),1,size(y,2))).^2) );
     % Distances between sound s and microphone r_{i,1} in the paper
-    figure(1);
-    clf; hold on;
+    if doplot,
+        figure(1);
+        clf; hold on;
+    end
     skalf = settings.v/settings.sr;
     data = zeros(4,length(ind),7); % 4 = top 4 peaks,
     for kkk = otherChannels;
@@ -37,10 +42,12 @@ for channelMirrorSearch = 1:8;
         dd = sqrt( sum( (y-repmat(x(:,kkk),1,size(y,2))).^2) );
         %    hold off;
         data(:,:,find(otherChannels==kkk))=(skalf*u{channelMirrorSearch,kkk}(:,ind)-repmat(dd,4,1));
-        plot(ind,(skalf*u{channelMirrorSearch,kkk}(:,ind)-repmat(dd,4,1))','.');
-        hold on;
-        plot(ind,-d1,'g-');
-        %pause;
+        if doplot,
+            plot(ind,(skalf*u{channelMirrorSearch,kkk}(:,ind)-repmat(dd,4,1))','.');
+            hold on;
+            plot(ind,-d1,'g-');
+            %pause;
+        end
     end
     
     
@@ -125,7 +132,7 @@ for channelMirrorSearch = 1:8;
                             bestinls = find(abs(dproj-ddd)<0.03);
                         end
                         
-                        if 0,
+                        if doplot,
                             figure(1); clf;
                             hold off;
                             plot(iii,ddd,'b.');
@@ -143,15 +150,15 @@ for channelMirrorSearch = 1:8;
         %
         dproj =  sqrt( sum( ( y(:,iii)-repmat(bestx,1,nnn) ).^2 ) );
         nrinls = sum( abs(dproj-ddd)<0.03);
-        if 1,
+        if doplot,
             figure(1); clf;
             hold off;
             plot(iii,ddd,'b.');
             hold on;
             plot(iii,dproj,'g.');
             title(num2str([channelMirrorSearch nrinls]));
-            pause(0.1);
-            pause;
+            %pause(0.1);
+            %pause;
         end
         
         %
@@ -171,11 +178,13 @@ for channelMirrorSearch = 1:8;
             end
             
             
-            figure(4); clf;
-            rita3(x,'g*');
-            hold on;
-            rita3(speglingar(1:3,:),'r*');
-            rita3(y,'g-');
+            if doplot,
+                figure(4); clf;
+                rita3(x,'g*');
+                hold on;
+                rita3(speglingar(1:3,:),'r*');
+                rita3(y,'g-');
+            end;
             fortsatt = 1;
         else
             fortsatt = 0;
