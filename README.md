@@ -29,6 +29,8 @@ Briefly the datasets are:
 8.  grieg5 - lecture room (3DR, 3DS, Cont, Echo, Single, Distinct)
 9.  spacecure1 - anechoic chamber (3DR, 3DS, Cont, NoEcho, Single, Distinct)
 10. whywereyouawayayearroy - anechoic chamber (3DR, 3DS, Cont, NoEcho, Multiple, NotDistinct)
+11. axelf - kitchen (2DR, 3DS, Cont, Echo, Single, Distinct)
+12. gone - kitchen (2DR, 3DS, Cont, Echo, Single, Distinct)
 
 Here
 * 3DR - Dimension of affine hull of receivers is 3. (Microphones not in a plane)
@@ -46,13 +48,13 @@ Here
 * Single - Single sound source
 * Multiple - Multiple sound sources
 * Distinct - Spatially distinct sound sources 
-* xxx - Spatially spread out sound sources
+* NotDistinct - Spatially spread out sound sources
 
 ### Experiments in lunch room  September 18, 2014
 
 The microphone setup is illustrated in the following figure. 
 
-![alt text](/tex/images/IMG_2283.JPG "Title")
+![Lunch Room](/tex/images/IMG_2283.JPG "Lunch Room")
 
 We made 3 experiments (bassh1, bassh2, bassh3). There are several still 
 images of the microphone setup and one stationary few film recording of the
@@ -62,7 +64,7 @@ experiments.
 
 The microphone setup is illustrated in the following figure. 
 
-![alt text](/tex/images/IMG_3442.JPG "Title")
+![Lecture Room](/tex/images/IMG_3442.JPG "Lecture Room")
 
 We made 5 experiments (greig1 to grieg5). There are several still 
 images of the microphone setup and a few film recordings of the
