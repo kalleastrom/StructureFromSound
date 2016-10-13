@@ -7,6 +7,39 @@ This is a challenging parameter estimation problem.
 For the project we also develop tools that can be of use for other TDOA type
 problems.
 
+If you use this code, please cite
+
+Simayijiang Zhayida, Simon Segerblom Rex, Yubin Kuang, Fredrik Andersson, Kalle {\AA}str{\"o}m}, 
+An Automatic System for Acoustic Microphone Geometry Calibration based on Minimal Solvers, 
+[https://arxiv.org/abs/1610.02392](arXiv preprint arXiv:1610.02392), 2016.
+
+@article{simayijiang2016automatic,
+  title={An Automatic System for Acoustic Microphone Geometry Calibration based on Minimal Solvers},
+  author={Simayijiang Zhayida, Simon Segerblom Rex, Yubin Kuang, Fredrik Andersson, Kalle {\AA}str{\"o}m},
+  journal={arXiv preprint arXiv:1610.02392},
+  year={2016}
+}
+
+Other relevant papers are:
+
+@inproceedings{simayijiang2014automatic,
+  title={An Automatic System for Microphone Self-Localization Using Ambient Sound},
+  author={Simayijiang, Zhayida and Andersson, Fredrik and Kuang, Yubin and {\AA}str{\"o}m, Kalle},
+  booktitle={European Signal Processing Conference (Eusipco 2014)},
+  pages={5},
+  year={2014},
+  organization={EURASIP (European Association for Signal Processing)}
+}
+
+@inbook{393831000cb64d7988c470971301d957,
+  title     = "Stratified Sensor Network Self-Calibration From TDOA Measurements",
+  keywords  = "Network Self-calibration, TDOA, TOA, Minimal Problem",
+  author    = "Yubin Kuang and Kalle {\AA}str{\"o}m",
+  year      = "2013",
+  booktitle = "[European Signal Processing Conference (Eusipco 2014)]",
+  publisher = "IEEE--Institute of Electrical and Electronics Engineers Inc.",
+}
+
 ## Code
 
 Run main.m

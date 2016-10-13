@@ -23,8 +23,8 @@ addpath tools
 % Some settings are needed for file read and for setting up where temporary
 % files will be saved.
 
-[a,settings]=read_from_sfsdb(tdoasystemsettings,3); % Choose dataset here.
-savedirname = 'tmp2';                    % Remember to change savefolderpath, so
+[a,settings]=read_from_sfsdb(tdoasystemsettings,12); % Choose dataset here.
+savedirname = 'tmp3';                    % Remember to change savefolderpath, so
                                                     % that you don't
                                                     % overwrite older
                                                     % results
