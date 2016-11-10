@@ -42,7 +42,7 @@ Other relevant papers are:
 
 ## Code
 
-Run main.m
+Run main.m 
 
 ## Data
 
