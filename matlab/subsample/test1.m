@@ -1,3 +1,4 @@
+
 %% Test of subsample methods
 
 x = 0:1000;
@@ -50,7 +51,7 @@ tau0 = tt(mini);
 
 %% Test interpolation
 
-tao0 = 3.7;
+tau0 = 3.7;
 f1t = zeros(size(f1));
 a = 2;
 for k = xmid;
@@ -67,7 +68,7 @@ errny2 = norm(f0t(xmid)-f1t(xmid))
 
 %[f,dfdx]=interp1d_with_derivative(f0,x0,a);
 
-tao0 = 3.6;
+tau0 = 3.6;
 f1t = zeros(size(f1));
 f1td = zeros(size(f1));
 a = 2;
@@ -84,7 +85,7 @@ end
 %delta_tau = ???
 
 %tau0 = tao0 + delta_tau;
-% iterera här för att minimera felet med avseende på tau0
+% iterera hï¿½r fï¿½r att minimera felet med avseende pï¿½ tau0
 
 errny1 = norm(f0(xmid)-f1t(xmid))
 errny2 = norm(f0t(xmid)-f1t(xmid))
