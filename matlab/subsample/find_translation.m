@@ -30,14 +30,29 @@ err = minv;
 
 %% Use interpolation and derivative to find correct value
 
-
-while err(end)>thresh
+nbr_iter = 0;
+while (err(end)>thresh) & (nbr_iter<10),
     tau0 = tau(end);
     f0t = interp1d(f0,xmid,a);
     [f1t,f1td] = interp1d_with_derivative(f1,xmid-tau0,a);
     % find a new tau
     tau(end+1) = tau0 - mean((f0t-f1t)./f1td);
+    % Here one could use the least squares fit instead
+    % This is similar in spirit to the Gauss-Newton iteration
+    % f \approx = f1t + f1td*delta.
+    % If we want to find delta which minimizes the sum of squared
+    % residuals res = (f0t') - (f1t' + f1td'*delta)
+    % This gives
+    % (f0t'-f1t') = (-f1td')*delta
+    % Think b = A*x
+    % x = inv(A'*A)*(A'*b) or matlab x = A\b;
+    delta_old = - mean((f0t-f1t)./f1td);
+    delta_new = -(f1td'\(f0t'-f1t'));
+    [delta_old delta_new]
+    tau(end+1) = tau0 + delta_new;
+    %
     err(end+1) = norm(f0t-f1t);
+    nbr_iter = nbr_iter+1;
 end
 
 trans = tau;
