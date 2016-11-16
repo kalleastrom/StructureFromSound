@@ -33,10 +33,10 @@ plot(x,ysa,'b--');
 
 %% 
 
-tau = 3.7;
+tao = 3.7;
 x = 1:1000;
 f0 = F0(x);
-f1 = F0(x+tau);
+f1 = F0(x+tao);
 
 %% Discrete search
 
@@ -47,7 +47,7 @@ for k = 1:length(tt);
 end
 
 [minv,mini]=min(err);
-tau0 = tt(mini);
+tao0 = tt(mini);
 
 %% Test interpolation
 
@@ -55,7 +55,7 @@ tau0 = 3.7;
 f1t = zeros(size(f1));
 a = 2;
 for k = xmid;
-    f1t(k) = interp1d(f1,k-tau,a);
+    f1t(k) = interp1d(f1,k-tao,a);
 end
 for k = xmid;
     f0t(k) = interp1d(f0,k,a);
@@ -73,7 +73,7 @@ f1t = zeros(size(f1));
 f1td = zeros(size(f1));
 a = 2;
 for k = xmid;
-    [f1t(k),f1td(k)] = interp1d_with_derivative(f1,k-tau0,a);
+    [f1t(k),f1td(k)] = interp1d_with_derivative(f1,k-tao0,a);
 end
 for k = xmid;
     f0t(k) = interp1d(f0,k,a);
@@ -84,8 +84,8 @@ end
 [(f0t(xmid)-f1t(xmid))./f1td(xmid)]
 %delta_tau = ???
 
-%tau0 = tao0 + delta_tau;
-% iterera hï¿½r fï¿½r att minimera felet med avseende pï¿½ tau0
+%tao0 = tao0 + delta_tau;
+% iterera här för att minimera felet med avseende på tau0
 
 errny1 = norm(f0(xmid)-f1t(xmid))
 errny2 = norm(f0t(xmid)-f1t(xmid))
