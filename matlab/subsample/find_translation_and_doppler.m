@@ -1,4 +1,4 @@
-function [trans, err] = find_translation(f0, f1, thresh, a, tt)
+function [z0, err] = find_translation_and_doppler(f0, f1, thresh, a, tt)
 % finds the translation between two similar functions f0 and f1. The
 % translation is estimated with an accuracy given by thresh. The
 % interpolation of the signals is done using a Gaussian kernel of with a
@@ -28,15 +28,29 @@ end
 tau = tt(mini);
 err = minv;
 
+z0 =[tau;1]; % starting values of unknown paramters 
+% translation and doppler
+
 %% Use interpolation and derivative to find correct value
 
 nbr_iter = 0;
+J = zeros(length(xmid),2);
+D = diag([1 1/1000]);
 while (err(end)>thresh) & (nbr_iter<10),
     tau0 = tau(end);
     f0t = interp1d(f0,xmid,a);
-    [f1t,f1td] = interp1d_with_derivative(f1,xmid-tau0,a);
+    [f1t,f1td] = interp1d_with_derivative(f1,z0(2)*xmid+z0(1),a);
+    J(:,1) = f1td';
+    J(:,2) = (f1td.*xmid)';
+    res = -(f0t'-f1t');
+    dz = -D*((J*D)\res);
+    znew = z0+dz;
+    [f1tnew,~] = interp1d_with_derivative(f1,znew(2)*xmid+znew(1),a);
+    [norm(res) norm(res+J*dz) norm(f0t-f1tnew)]
+    % if norm(resnew) > norm(res) då minska steget.   
+    z0 = znew;
     % find a new tau
-    tau(end+1) = tau0 - mean((f0t-f1t)./f1td);
+    %tau(end+1) = tau0 - mean((f0t-f1t)./f1td);
     % Here one could use the least squares fit instead
     % This is similar in spirit to the Gauss-Newton iteration
     % f \approx = f1t + f1td*delta.
@@ -46,13 +60,13 @@ while (err(end)>thresh) & (nbr_iter<10),
     % (f0t'-f1t') = (-f1td')*delta
     % Think b = A*x
     % x = inv(A'*A)*(A'*b) or matlab x = A\b;
-    delta_old = - mean((f0t-f1t)./f1td);
-    delta_new = -(f1td'\(f0t'-f1t'));
+    %delta_old = - mean((f0t-f1t)./f1td);
+    %delta_new = -(f1td'\(f0t'-f1t'));
     %[delta_old delta_new]
     %log10(abs(delta_new))
     %keyboard;
     %[norm((f0t-f1t)) norm((f0t') - (f1t' - f1td'*delta_old)) ]
-    tau(end+1) = tau0 + delta_new;
+    %tau(end+1) = tau0 + delta_new;
     %
     err(end+1) = norm(f0t-f1t);
     nbr_iter = nbr_iter+1;

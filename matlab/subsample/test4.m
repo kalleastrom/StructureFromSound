@@ -74,14 +74,17 @@ channels{1} = F0(x,a);
 nbr_decimals = 2; % how many decimals the translation should have
 true_translation = round(2*10^(nbr_decimals+1)*rand(1,nbr_channels-1))/10^(nbr_decimals) - 10;
 true_translation = [0 true_translation];
+true_translation = zeros(size(true_translation));
+true_doppler = 1 + 0.01*randn(1,nbr_channels-1);
+true_doppler = [1 true_doppler];
 
 % create the channels and plot them
 figure(1); clf; 
 subplot(nbr_channels,1,1); plot(x,channels{1});
 title(['The ' num2str(nbr_channels) ' different channels']);
 for i = 2:nbr_channels
-    channels{i} = F0(x+true_translation(i),a);
-    channels{i} = channels{i}+1*randn(size(channels{i}));
+    channels{i} = F0((1/true_doppler(i))*(x-true_translation(i)),a);
+    channels{i} = channels{i}+0*randn(size(channels{i}));
     subplot(nbr_channels,1,i); plot(x,channels{i});
 end
 
@@ -91,8 +94,8 @@ tt = [-15 15]; % the translations to be tried
 trans = zeros(nbr_channels,1);
 err = zeros(nbr_channels,1);
 for i = 2:nbr_channels    
-    [curr_trans, curr_err] = find_translation(channels{1}, channels{i}, thresh, a, tt);
-    trans(i) = curr_trans(end);
+    [curr_z, curr_err] = find_translation_and_doppler(channels{1}, channels{i}, thresh, a, tt);
+    z(:,i) = curr_z;
     err(i) = curr_err(end);
 end
 
