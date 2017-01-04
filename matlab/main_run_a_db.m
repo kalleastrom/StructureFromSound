@@ -3,7 +3,7 @@
 
 systems = {'sfs_system_v1'};
 n_systems = length(systems);
-examples = [1 2 3 8];
+examples = [3];
 n_examples = length(examples);
 
 

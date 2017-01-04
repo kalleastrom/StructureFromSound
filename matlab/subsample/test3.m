@@ -63,8 +63,9 @@
 
 %% try finding the translation between more than two channels (variable)
 
-nbr_channels = 8;
+nbr_channels = 2;
 channels = cell(nbr_channels,1);
+noise_std = 0.001;
 
 x = 1:2000;
 a = 0;
@@ -81,7 +82,7 @@ subplot(nbr_channels,1,1); plot(x,channels{1});
 title(['The ' num2str(nbr_channels) ' different channels']);
 for i = 2:nbr_channels
     channels{i} = F0(x+true_translation(i),a);
-    channels{i} = channels{i}+1*randn(size(channels{i}));
+    channels{i} = channels{i}+noise_std*randn(size(channels{i}));
     subplot(nbr_channels,1,i); plot(x,channels{i});
 end
 
