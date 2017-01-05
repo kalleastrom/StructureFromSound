@@ -1,4 +1,4 @@
-function out = estimate_trans_std_faster(opts)
+function out = estimate_trans_std_faster(opts,count)
 
 % the same as test3B_estimate_std_in_translation_faster, but as a function
 % with opts inparameter
@@ -15,11 +15,20 @@ a1 = opts.a1; % Blurr 1
 a2 = opts.a2; % Blurr 2 
 a22 = a2*sqrt(2);
 N = opts.N; % Nr of runs with different noise realizations
+if isfield(opts, 'tt')
+    tt = opts.tt;
+else
+    tt = [-15 15]; % the translations to be tried
+end
 
 % generate ground truth translations
 nbr_decimals = opts.nbr_decimals;  % how many decimals the translation should have
 true_translation = round(2*10^(nbr_decimals+1)*rand(1,nbr_channels-1))/10^(nbr_decimals) - 10;
+if isfield(opts,'true_translation')
+    true_translation = opts. true_translation; % optional inparameter
+end
 true_translation = [0 true_translation];
+
 
 %% Run N times
 
@@ -36,7 +45,6 @@ for kk = 1:N;
     
     % Estimate the translation
     thresh = 10^(-8); % decides how good the translation estimation needs to be
-    tt = [-15 15]; % the translations to be tried. add in opts?
     trans = zeros(nbr_channels,1);
     err = zeros(nbr_channels,1);
     for i = 2:nbr_channels
