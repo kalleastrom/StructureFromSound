@@ -3,14 +3,16 @@
 if ~exist('a'),
     % First time load in sound data a and settings, but these are quite
     % big files
-    load spacecurea; % load a real sound experiment
-    load spacecuresettings; % load settings
+    %load spacecurea; % load a real sound experiment
+    %load spacecuresettings; % load settings
+    load blubba;
+    load blubbsettings;
     xtid = settings.xtid;
     ymeter = settings.ymeter;
     % Calcualte GCC-PHAT scores
     settings.v = 340;                %speed of sound
     settings.mm = size(a,1);         %number of microphones
-    settings.channels = 1:8;         %channels to read
+    settings.channels = 1:2;         %channels to read
     settings.refChannel = 1;         %reference channel
     settings.nbrOfSamples = length(a);    
     %% Correlation: GCC-PHAT
