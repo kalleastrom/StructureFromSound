@@ -1,4 +1,4 @@
-function [trans, err] = find_translation2(f0, f1, thresh, a, tt)
+function [trans, err,f0t,f1t] = find_translation2(f0, f1, thresh, a, tt)
 % finds the translation between two similar functions f0 and f1. The
 % translation is estimated with an accuracy given by thresh. The
 % interpolation of the signals is done using a Gaussian kernel of with a
@@ -21,8 +21,10 @@ xmid = x(100:(end-100));
 % tic;
 % f0t = interp1d(f0,xmid,a);
 % toc
-t0 = 500;
-w = 400;
+%t0 = 500;
+%w = 400;
+t0 = round(length(f0)/2);
+w = t0-100;
 % tic;
 f0t=interp1d_with_derivative_restricted(f0,t0,w,a);
 % toc
