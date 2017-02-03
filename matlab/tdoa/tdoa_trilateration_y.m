@@ -35,14 +35,15 @@ for jj = index,
         [kkk length(index) jj]
     end
     %keyboard;
-    [yy,oo,inl_one_y,nr_inlierid,err_rms] = tdoa_trilateration_y_one_ransac(u(:,jj),x,10,ransac_tol,find(inliers(:,jj)));
+    [yy,oo,inl_one_y,nr_inlierid,err_rms] = tdoa_trilateration_y_one_ransac(u(:,jj),x,30,ransac_tol,find(inliers(:,jj)));
     yy = real(yy);
     oo = real(oo);
 %     [yy,oo] = tdoa_trilateration_y_one_bundle(u(:,jj),x,yy,oo,find(inliers(:,jj))); % BUGG. Man ska inte bundla 
 %                                                                                     % över de ursprungliga inliers utan de nya
     %keyboard;
+    if length(inl_one_y)>3,
     [yy,oo] = tdoa_trilateration_y_one_bundle(u(:,jj),x,yy,oo,inl_one_y); % BUGG. Man ska inte bundla 
-                                                                                    % över de ursprungliga inliers utan de nya
+    end;                                                                              % över de ursprungliga inliers utan de nya
     y(:,jj) = yy;
     o(:,jj) = oo;
     inl(inl_one_y,jj)=ones(length(inl_one_y),1);

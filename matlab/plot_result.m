@@ -19,7 +19,9 @@ TT = eye(4); % One could use a change of coordinates here
 figure(1); clf;
 rita3(pflat(TT*fyllmedettor(x)),'g*');
 hold on;
-rita3(pflat(TT*fyllmedettor(speglingar(1:3,:))),'r*');
+if size(speglingar,2)>0,
+    rita3(pflat(TT*fyllmedettor(speglingar(1:3,:))),'r*');
+end;
 rita3(pflat(TT*fyllmedettor(y)),'g-');
 %title('Valt koordinatsystem så att spegelplanen är parallella med xy-planen ungefär');
 

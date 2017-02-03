@@ -47,9 +47,9 @@ function [settings,scores,matches,rns,result] = main_gcctracking_rex(a,settings)
     settings.RANSACframeOverlap = 1;          %overlap of lines
     settings.RANSACmaxNbrOfGroups = 5;        %max nbr of lines
     settings.RANSACminNbrOfInliers = 6;       %min nbr of inliers
-    settings.RANSACinlierThreshold = 1;     %max distance to line
+    settings.RANSACinlierThreshold = 3; %1    %max distance to line
     settings.RANSACsharedPointsThreshold = 2; %max nbr of shared points
-    settings.RANSACmaxSlope = 3.5;            %max derivative
+    settings.RANSACmaxSlope = 7;            %max derivative
     %Default valuesOld: [350,21,1,5,5,1.5,2,3.5]
     %Default valuesOld: [350,21,1,5,7,1.5,2,3.5]
     %Default values: [350,21,1,5,6,1,2,3.5]

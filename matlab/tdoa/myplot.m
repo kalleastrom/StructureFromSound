@@ -43,6 +43,7 @@ if settings.doplot,
         plot(utimes(maxi),dd(kk,maxi)-dd(1,maxi),'r*');
         plot(utimes,u(kk,:),'go');
         plot(utimes(maxi),u(kk,maxi),'yo');
+        title(['Channel 1 vs channel ' num2str(kk)]);
         %keyboard;
         %pause;
         %drawnow;

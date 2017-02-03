@@ -7,7 +7,7 @@ close all;
 
 nbr_channels = 2;
 channels = cell(nbr_channels,1);
-noise_std = 0.1;
+noise_std = 0.01;
 
 x = 1:2000;
 a = 0;

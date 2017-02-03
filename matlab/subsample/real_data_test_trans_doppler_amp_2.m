@@ -39,36 +39,36 @@ if ~exist('a'),
     
 end
 
-% Study channels 1 and 2 only
-figure(1);
-plot(u{1,2}','.')
-
-% Select a shorter timeframe where the motion is
-% almost linear (with little acceleration)
-clear usel usub
-xsel = 2241:2270;
-usel = u{1,2}(xsel);
-
-figure(2);
-plot(xsel,usel);
-xt = xtid(xsel);
+% % Study channels 1 and 2 only
+% figure(1);
+% plot(u{1,2}','.')
+% 
+% % Select a shorter timeframe where the motion is
+% % almost linear (with little acceleration)
+% clear usel usub
+% xsel = 2241:2270;
+% usel = u{1,2}(xsel);
+% 
+% figure(2);
+% plot(xsel,usel);
+% xt = xtid(xsel);
 
 %%
 % make a fit to the data using a low order polynomial
 % Jag provade lite olika gradtal och tittade p� residualerna.
 % Vid grad 3 tyckte jag att det b�rjade se bra ut.
 
-[p,S,mu] = polyfit(xt,usel,3);
-ucalc = polyval(p,xt,S,mu);
-
-figure(3);
-hold off;
-plot(xt,usel,'r.');
-hold on
-plot(xt,ucalc,'g.');
-
-figure(4);
-plot(xt,usel-ucalc,'.');
+% [p,S,mu] = polyfit(xt,usel,3);
+% ucalc = polyval(p,xt,S,mu);
+% 
+% figure(3);
+% hold off;
+% plot(xt,usel,'r.');
+% hold on
+% plot(xt,ucalc,'g.');
+% 
+% figure(4);
+% plot(xt,usel-ucalc,'.');
 
 %%
 
@@ -76,18 +76,20 @@ plot(xt,usel-ucalc,'.');
 % meter to offset in samplepoint
 % usel is already in sample points
 
-it = settings.isel(xsel);
-jt = usel;
-
+it = find(dmatches.uindex>2240); % Don't look a the first part, where there 
+% the tracks are interupted. 
+mid_points = [0 settings.isel];
 nup = 0000;
 ndown = 1000;
-resultat = zeros(3,length(xsel));
+resultat = zeros(3,length(it));
 
-for kk = 1:length(xsel);
-    kk
-    temp_trans = usel(kk); % Use the estimated time-difference from gcc as initialization
-    cutout1 = a(1,((it(kk)-ndown):(it(kk)+nup)));
-    cutout2 = a(2,((it(kk)-ndown):(it(kk)+nup))+temp_trans);
+for kk = 1:length(it);
+kk
+    ki = it(kk);
+    ii = mid_points(dmatches.uindex(ki));
+    temp_trans = round(dmatches.uij(2,ki)); % Use the estimated time-difference from gcc as initialization
+    cutout1 = a(1,((ii-ndown):(ii+nup)));
+    cutout2 = a(2,((ii-ndown):(ii+nup))+temp_trans);
     
     thresh = 10^(-8); % decides how good the translation estimation needs to be
     tt = [-15 15]; % the translations to be tried
@@ -118,7 +120,7 @@ for kk = 1:length(xsel);
 %     VX_approx = noise_std_estimate^2 / (sum(tmp.*tmp));
     
     if 1,
-        figure(21);
+        figure(31);
         clf; hold off
         plot(f0t,'r');
         hold on;
@@ -126,51 +128,59 @@ for kk = 1:length(xsel);
         z
         pause(0.1);
     end
-    resultat(:,kk)=z;
+    zfix = z;
+    zfix(1)=zfix(1)+temp_trans;
+    
+    resultat(:,kk)=zfix;
 %      usub(kk)=-(curr_trans(end)-temp_trans);
 %      ustdnoise(kk)=noise_std_estimate;
 %      ustdtrans(kk)=SX;
 end
 
-%%
-
-% [p,S,mu] = polyfit(xt,usub,3);
-% usubcalc = polyval(p,xt,S,mu);
-% 
-% figure(5);
-% hold off;
-% plot(xt,usel,'ro');
-% hold on
-% plot(xt,ucalc,'go');
-% plot(xt,usub,'r*');
-% plot(xt,usubcalc,'g*');
-% 
-% figure(6);
-% subplot(2,1,1);
-% plot(xt,usel-ucalc,'.');
-% axis([min(xt) max(xt) -1 1]);
-% subplot(2,1,2);
-% plot(xt,usub-usubcalc,'.');
-% axis([min(xt) max(xt) -1 1]);
-% 
-% figure(8);
-% colormap(gray);
-% imagesc(xtid,settings.dsel,scores{1,2});
-% axis xy
-% 
-% figure(9);
-% colormap(gray);
-% imagesc(xtid(xsel),settings.dsel,scores{1,2}(:,xsel));
-% axis xy
-
+%resultat(1,1:122) = resultat(1,1:122) + round(dmatches.uij(2,(it(1:122)))); 
 
 %%
+u_gcc = skalf*dmatches.uij(2,it);
+sj = dres.y(:,it);
+oj = dres.o(:,it);
+r1 = dres.x(:,1);
+r2 = dres.x(:,2);
+nn = size(sj,2);
+u_calc = sqrt(sum( (sj-repmat(r2,1,nn)).^2 ) ) - sqrt(sum( (sj-repmat(r1,1,nn)).^2 ));
+d2 = sqrt(sum( (sj-repmat(r2,1,nn)).^2 ));
+d1 = sqrt(sum( (sj-repmat(r1,1,nn)).^2 ));
+d2d1 = d2./d1;
+
+sjd = diff(sj')';
+td = diff(dmatches.utimes(it));
+sjp = sjd./repmat(td,3,1);
+n2 = (sj-repmat(r2,1,nn));
+n2n = sqrt(sum( n2.^2 ));
+n2 = n2./repmat(n2n,3,1);
+n1 = (sj-repmat(r1,1,nn));
+n1n = sqrt(sum( n1.^2 ));
+n1 = n1./repmat(n1n,3,1);
+n1 = n1(:,1:(end-1));
+n2 = n2(:,1:(end-1));
+
+dopp = sum(n1.*sjp)-sum(n2.*sjp);
+
+%%
+figure;
+clf;
+plot(dmatches.utimes(it),u_gcc,'r.');
+hold on
+plot(dmatches.utimes(it),u_calc,'g.');
+plot(dmatches.utimes(it(1:384)),skalf*resultat(1,1:384),'b.');
 
 %
-% std(usel-ucalc)
-%
-% std(usub-usubcalc)
+figure(2); clf
+plot(d2d1(1:384),resultat(3,1:384).^2,'.')
 
-
-
+%%
+figure(3); clf
+plot(dopp(1:384)*skalf,1-resultat(2,1:384),'.')
+hold on
+plot([0 0.002],[0 0.002])
+axis([0 0.002 0 0.002])
 

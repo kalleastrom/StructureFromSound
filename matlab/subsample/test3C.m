@@ -15,7 +15,7 @@ opts.noise_std = 0.03;
 opts.signal_length = 1000;
 opts.a1 = 0; % Blurr 1
 opts.a2 = 2; % Blurr 2
-opts.N = 100; % Nr of runs with different noise realizations
+opts.N = 20; % Nr of runs with different noise realizations
 opts.nbr_decimals = 2; % how many decimals the translation should have
 
 % OBS! optional parameters
@@ -93,7 +93,7 @@ opts.nbr_channels = 2;
 opts.signal_length = 1000;
 opts.a1 = 0; % Blurr 1
 opts.a2 = 2; % Blurr 2
-opts.N = 100; % Nr of runs with different noise realizations
+opts.N = 20; % Nr of runs with different noise realizations
 opts.nbr_decimals = 2; % how many decimals the translation should have
 
 % OBS! optional parameters

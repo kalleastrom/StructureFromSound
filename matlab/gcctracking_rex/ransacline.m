@@ -3,15 +3,16 @@ function [delays,lines] = ransacline(A,settings)
 
 delays = NaN(settings.RANSACmaxNbrOfGroups,size(A,2));
 lines = NaN(settings.RANSACmaxNbrOfGroups,size(A,2));
-
-tmp = find(sum(~isnan(A)));
+%keyboard;
+tmp = find(sum(~isnan(A),1));
 if numel(tmp) < settings.RANSACminNbrOfInliers
     return
 end
 
 %Non-nan points in A:
 [rows,cols] = find(~isnan(A));
-points = [cols'; A(sub2ind(size(A),rows,cols))'];
+tmpp = A(sub2ind(size(A),rows(:),cols(:)));
+points = [cols(:)'; tmpp(:)'];
 
 %All possible combinations:
 n = length(points);
@@ -23,10 +24,12 @@ pairs = pairs(:,randperm(length(pairs))); %shuffling
 nbrOfIterations = settings.RANSACnbrOfIterations;
 tmpdelays = NaN(nbrOfIterations,size(A,2));
 tmplines = NaN(nbrOfIterations,size(A,2));
+%keyboard;
 for k = 1:min(settings.RANSACnbrOfIterations,length(pairs))
     %Line using two random points:
     p = [points(:,pairs(1,k)) points(:,pairs(2,k))];
     ll = null([p' ones(2,1)]);
+    %keyboard;
     okSlope = abs(ll(1)/ll(2)) < settings.RANSACmaxSlope;
     if ~okSlope
         continue

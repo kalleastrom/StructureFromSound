@@ -49,6 +49,9 @@ else
             counter = counter+1;
             yy = ysols(:,ii);
             oo = osols(:,ii);
+            % Make solutions real or check that they are real???
+            yy = real(yy);
+            oo = real(oo);
             d_proj = tdoa_calc_u_from_xyo(x,yy,oo);
             ys(:,counter)=yy;
             os(:,counter)=oo;

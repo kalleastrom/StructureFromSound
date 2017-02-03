@@ -1,4 +1,4 @@
-function [z0, err] = find_translation_doppler_amplitude(f0, f1, thresh, a, tt)
+function [z0, err, f0t, f1t] = find_translation_doppler_amplitude(f0, f1, thresh, a, tt)
 % finds the translation, doppler and constant amplitude between two similar 
 % functions f0 and f1 (f1 wrt f0). The translation is estimated with an 
 % accuracy given by thresh. The interpolation of the signals is done using 
@@ -48,6 +48,9 @@ while (err(end)>thresh) && (nbr_iter<10),
     J(:,3) = f1t'; % obsobs!
     res = -(f0t'-f1t');
     dz = -D*((J*D)\res);
+    if abs(dz(1))>1,
+        dz = dz*(1/dz(1));
+    end
     znew = z0+dz;
     [f1tnew,~] = interp1d_with_derivative(f1,znew(2)*xmid+znew(1),a); % obs! add paranthesis: znew(2)*(xmid+znew(1))?
     [norm(res) norm(res+J*dz) norm(f0t-f1tnew)];
