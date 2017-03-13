@@ -7,7 +7,7 @@
 addpath ../gcctracking_rex/
 
 %load ../../data/savefiles/tmp3/space_cure-D.mat
-skalf = settings.v/settings.sr;
+%skalf = settings.v/settings.sr;
 %clear a
 %load allt20170217
 
@@ -16,29 +16,7 @@ if ~exist('a'),
     % big files
     %load spacecurea; % load a real sound experiment
     %load spacecuresettings; % load settings
-    load blubba;
-    load blubbsettings;
-    xtid = settings.xtid;
-    ymeter = settings.ymeter;
-    % Calcualte GCC-PHAT scores
-    settings.v = 340;                %speed of sound
-    settings.mm = size(a,1);         %number of microphones
-    settings.channels = 1:2;         %channels to read
-    settings.refChannel = 1;         %reference channel
-    settings.nbrOfSamples = length(a);
-    %% Correlation: GCC-PHAT
-    settings.wf = @(x) 1./(abs(x)+(abs(x)<5e-3)); %weighting function
-    settings.firstSamplePoint = 1; %center sample point of first frame
-    settings.frameSize = 2048;     %width of frame in sample points
-    settings.dx = 1000;            %distance between frames in sample points
-    settings.frameOverlap = settings.frameSize-settings.dx; %overlap between frames
-    settings.sw = 800;             %clipping of search window
-    scores = gccscores(a,settings);
-    
-    %% Delays: Find highest peaks
-    settings.nbrOfPeaks = 1;       %max number of peaks
-    settings.minPeakHeight = 0.01; %min value of local maxima
-    %Default: [4,0.01]
+    load asol2
     
     u = getdelays(scores,settings);
     
@@ -82,27 +60,40 @@ end
 % meter to offset in samplepoint
 % usel is already in sample points
 
-it = find(dmatches.uindex>2240); % Don't look a the first part, where there
-% the tracks are interupted.
-mid_points = [0 settings.isel];
+it = 10:2843;
 nup = 0000;
 ndown = 1000;
 resultat = zeros(3,length(it));
 noise_stds = zeros(1,length(it));
+skalf = settings.v/settings.sr;
+mid_points = settings.dx*(it);
 
 for kk = 1:length(it);
     kk
     ki = it(kk);
-    ii = mid_points(dmatches.uindex(ki));
-    temp_trans = round(dmatches.uij(2,ki)); % Use the estimated time-difference from gcc as initialization
+    % Calculate approximate shift using asol
+    dcalc = norm(asol.y(:,ki)-asol.x(:,2)) - norm(asol.y(:,ki)-asol.x(:,1));
+    ucalc = dcalc/skalf;
+    % Perturb it a bit
+    ucalc = round(ucalc+randn*2);
+   
+    %ucalc = -62
+    ii = mid_points(kk);
+    temp_trans = ucalc; % Use the estimated time-difference from gcc as initialization
     cutout1 = a(1,((ii-ndown):(ii+nup)));
     cutout2 = a(2,((ii-ndown):(ii+nup))+temp_trans);
+    cutout1 = cutout1-mean(cutout1);
+    cutout2 = cutout2-mean(cutout2);
     
     thresh = 10^(-8); % decides how good the translation estimation needs to be
     tt = [-15 15]; % the translations to be tried
     a2 = 2;
     a22 = a2*sqrt(2);
     [z, curr_err,f0t,f1t] = find_translation_doppler_amplitude(cutout1, cutout2, thresh, a2, tt);
+    z
+    
+    ucalc
+    z(1)+temp_trans
     
     % Noise estimation
     noise_var_estimate = var(f1t-f0t) / (2*(1/sqrt(2*pi*a22^2)));
@@ -147,19 +138,23 @@ end
 %resultat(1,1:122) = resultat(1,1:122) + round(dmatches.uij(2,(it(1:122))));
 
 %%
-u_gcc = skalf*dmatches.uij(2,it);
-sj = dres.y(:,it);
-oj = dres.o(:,it);
-r1 = dres.x(:,1);
-r2 = dres.x(:,2);
+di1i2 = toa_calc_d_from_xy(asol.x(:,[1 2]),asol.y);
+dd = diff(di1i2);
+dcalc = dd(it);
+ucalc = dcalc/skalf;
+u_gcc = ucalc;
+sj = asol.y(:,it);
+r1 = asol.x(:,1);
+r2 = asol.x(:,2);
 nn = size(sj,2);
 u_calc = sqrt(sum( (sj-repmat(r2,1,nn)).^2 ) ) - sqrt(sum( (sj-repmat(r1,1,nn)).^2 ));
 d2 = sqrt(sum( (sj-repmat(r2,1,nn)).^2 ));
 d1 = sqrt(sum( (sj-repmat(r1,1,nn)).^2 ));
 d2d1 = d2./d1;
 
+utimes = mid_points/settings.sr;
 sjd = diff(sj')';
-td = diff(dmatches.utimes(it));
+td = diff(utimes);
 sjp = sjd./repmat(td,3,1);
 n2 = (sj-repmat(r2,1,nn));
 n2n = sqrt(sum( n2.^2 ));
@@ -172,31 +167,50 @@ n2 = n2(:,1:(end-1));
 
 dopp = sum(n1.*sjp)-sum(n2.*sjp);
 
+datasel = find(data(:,1)==1 & data(:,2)==2);
+ugcc_t = data(datasel,3)*1000/96000;
+ugcc_d = data(datasel,4);
+ugcc_u = data(datasel,4)/skalf;
+
+
+
 %%
 figure(1);
 clf;
-plot(dmatches.utimes(it),u_gcc,'r.');
+plot(ugcc_t,ugcc_d,'r.');
 hold on
-plot(dmatches.utimes(it),u_calc,'g.');
-plot(dmatches.utimes(it(1:384)),skalf*resultat(1,1:384),'b.');
+plot(utimes,dcalc,'g.');
+plot(utimes,skalf*resultat(1,:),'b.');
 xlabel('Time in seconds');
 ylabel('Distance difference d2-d1 in meters');
 
 
 %
 figure(2); clf
-plot(d2d1(1:384),resultat(3,1:384).^2,'.')
-axis([0.7 1.3 0.5 4]);
+plot(1.3*d2d1.^2,resultat(3,:),'.')
+hold on;
+plot([0 2],[0 2],'g');
+%axis([0 2 0 2]);
 xlabel('Distance quotient d2/d1');
 ylabel('Amplitude factor');
 
+figure(4); clf;
+plot(resultat(3,:),'b.');
+hold on
+plot(1.3*d2d1.^2,'g');
+
+
 %
 figure(3); clf
-plot(dopp(1:384)*skalf,1-resultat(2,1:384),'.')
+plot(dopp*skalf,1-resultat(2,1:(end-1)),'.')
 hold on
-plot([0 0.005],[0 0.005])
-axis([0 0.005 0 0.005])
+plot([-0.005 0.005],[-0.005 0.005])
+%axis([-0.005 0.005 -0.005 0.005])
 
+figure(6); clf;
+plot(1-resultat(2,:),'b.');
+hold on
+plot(dopp*skalf,'g');
 
 %%
 

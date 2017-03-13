@@ -226,4 +226,4 @@ else
     plot_result(result);
 end
 
-%   Copyright 2013-2016, Kalle Åström
+%   Copyright 2013-2017, Kalle Åström

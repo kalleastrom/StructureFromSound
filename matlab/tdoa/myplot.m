@@ -35,7 +35,7 @@ if settings.doplot,
         figure(10+kk);
         clf;
         colormap(gray);
-        imagesc(settings.xtid,settings.ymeter,rns{kk});
+        imagesc(settings.xtid,-settings.ymeter,rns{kk});
         xlabel('time in seconds');
         ylabel('offset in meters');
         hold on;

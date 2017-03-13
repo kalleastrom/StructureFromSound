@@ -1,4 +1,4 @@
-function [z0, err, f0t, f1t] = find_translation_doppler_amplitude(f0, f1, thresh, a, tt)
+function [z0, err, f0t, f1t] = find_translation_doppler_amplitude(f0, f1, thresh, a2, tt)
 % finds the translation, doppler and constant amplitude between two similar 
 % functions f0 and f1 (f1 wrt f0). The translation is estimated with an 
 % accuracy given by thresh. The interpolation of the signals is done using 
@@ -8,7 +8,7 @@ function [z0, err, f0t, f1t] = find_translation_doppler_amplitude(f0, f1, thresh
 % corresponging error in err(end)
 
 if isempty(thresh); thresh = 0.001; end
-if isempty(a); a = 2; end
+if isempty(a2); a2 = 2; end
 if isempty(tt); tt = [-10 10]; end
 
 if length(f0)~=length(f1)
@@ -19,9 +19,9 @@ tt = tt(1):tt(end);
 
 x = 1:length(f0);
 xmid = x(100+1:end-100);
-f0t = interp1d(f0,xmid,a);
+f0t = interp1d(f0,xmid,a2);
 for k = 1:length(tt)
-    f1t = interp1d(f1,xmid-tt(k),a);
+    f1t = interp1d(f1,xmid-tt(k),a2);
     err(k) = norm(f0t-f1t);
 end
 
@@ -37,10 +37,10 @@ z0 =[tau;1;1]; % starting values of unknown paramters
 nbr_iter = 0;
 J = zeros(length(xmid),2);
 D = diag([1 1/1000 1/1000]); % obs! what is D?
-while (err(end)>thresh) && (nbr_iter<10),
+while (err(end)>thresh) && (nbr_iter<20),
 %     tau0 = tau(end);
-    f0t = interp1d(f0,xmid,a);
-    [f1t,f1td] = interp1d_with_derivative(f1,z0(2)*xmid+z0(1),a); % obs! Where is the amplitude? 
+    f0t = interp1d(f0,xmid,a2);
+    [f1t,f1td] = interp1d_with_derivative(f1,z0(2)*xmid+z0(1),a2); % obs! Where is the amplitude? 
     f1t = z0(3)*f1t; % add the amplitude
     f1td = z0(3)*f1td;
     J(:,1) = f1td';
@@ -49,10 +49,10 @@ while (err(end)>thresh) && (nbr_iter<10),
     res = -(f0t'-f1t');
     dz = -D*((J*D)\res);
     if abs(dz(1))>1,
-        dz = dz*(1/dz(1));
+        dz = dz*(1/abs(dz(1)));
     end
     znew = z0+dz;
-    [f1tnew,~] = interp1d_with_derivative(f1,znew(2)*xmid+znew(1),a); % obs! add paranthesis: znew(2)*(xmid+znew(1))?
+    [f1tnew,~] = interp1d_with_derivative(f1,znew(2)*xmid+znew(1),a2); % obs! add paranthesis: znew(2)*(xmid+znew(1))?
     [norm(res) norm(res+J*dz) norm(f0t-f1tnew)];
     % if norm(resnew) > norm(res) d� minska steget.   
     z0 = znew;
