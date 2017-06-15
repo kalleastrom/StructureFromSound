@@ -1,4 +1,4 @@
-function [z0, err] = find_translation_and_doppler(f0, f1, thresh, a, tt)
+function [z0, err, f0t, f1t] = find_translation_and_doppler(f0, f1, thresh, a, tt)
 % finds the translation between two similar functions f0 and f1. The
 % translation is estimated with an accuracy given by thresh. The
 % interpolation of the signals is done using a Gaussian kernel of with a
@@ -47,7 +47,7 @@ while (err(end)>thresh) & (nbr_iter<10),
     znew = z0+dz;
     [f1tnew,~] = interp1d_with_derivative(f1,znew(2)*xmid+znew(1),a);
     [norm(res) norm(res+J*dz) norm(f0t-f1tnew)]
-    % if norm(resnew) > norm(res) då minska steget.   
+    % if norm(resnew) > norm(res) dï¿½ minska steget.   
     z0 = znew;
     % find a new tau
     %tau(end+1) = tau0 - mean((f0t-f1t)./f1td);

@@ -94,8 +94,9 @@ end
 % OBS! Not checked yet.
 
 cut_len = 100; 
-freq = 96000;
-t_scale = 1/freq;
+% freq = 96000;
+% t_scale = 1/freq;
+t_scale = 1;
 
 % W = channels{1}; % use channels_mean below instead
 W = channels_mean;
@@ -131,20 +132,27 @@ YY_r_EEstreck_cut = YY_r_EEstreck(cut_len+1:end-cut_len);
 
 % find covariance of b
 CB = zeros(2);
+% CB(1,1) = 4* sum(W_prime_cut .* W_prime_r_EEstreck_cut);
+% CB(1,2) = 4* sum( (t_cut.*W_prime_cut) .*  Y_r_EEstreck_cut);
+% CB(2,1) = CB(1,2);
+% CB(2,2) = 4* sum( (t_cut.^2 .* W_prime_cut) .* YY_r_EEstreck_cut );
+
 CB(1,1) = 4* sum(W_prime_cut .* W_prime_r_EEstreck_cut);
-CB(1,2) = 4* sum( (t_cut.*W_prime_cut) .*  Y_r_EEstreck_cut);
-CB(2,1) = CB(1,2);
-CB(2,2) = 4* sum( (t_cut.^2 .* W_prime_cut) .* YY_r_EEstreck_cut );
+CB(1,2) = 4* sum( (W_prime_cut) .*  Y_r_EEstreck_cut); % should be same as CB(2,1)
+CB(2,1) = 4* sum( (t_cut.*W_prime_cut) .*  W_prime_r_EEstreck_cut); % should be same as CB(1,2)
+CB(2,2) = 4* sum( (t_cut .* W_prime_cut) .* Y_r_EEstreck_cut );
 
 % compute covariance of X
 % CX = -(EA^(-1))^T*(-EA)^(-1)*CB = (EA^T)^(-1)*EA^(-1)*CB
 % CX = (EA')\(EA\CB);
-CX = EA'\CB/EA; % see p 34 in http://users.isy.liu.se/en/rt/hendeby/files/PhD1161.pdf
+% CX = EA\CB/EA'; % see p 34 in http://users.isy.liu.se/en/rt/hendeby/files/PhD1161.pdf
+CX = EA'\CB/EA;
 % CX = EA'\EA\CB; % same as (EA'\EA)\CB, becomes real
 
 % OBS! Haven't checked part below!!!
 %% save data to return
 
+out.cx = CX;
 out.all_z = all_z; % the N different estimated trans, doppler and amplitude
 out.est_z = mean(all_z,2); % empirical trans, doppler
 out.true_z = [true_translation(2); true_doppler(2)]; % z ground truth
