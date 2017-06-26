@@ -6,7 +6,7 @@ close all;
 
 % settings
 opts.nbr_channels = 2;
-opts.noise_std = 0.02;
+opts.noise_std = 0.01;
 opts.signal_length = 1000;
 opts.a1 = 0;
 opts.a2 = 2;
