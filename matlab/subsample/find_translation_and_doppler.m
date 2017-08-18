@@ -1,4 +1,4 @@
-function [z0, err, f0t, f1t] = find_translation_and_doppler(f0, f1, thresh, a, tt)
+function [z0, err,f0t,f1tnew] = find_translation_and_doppler(f0, f1, thresh, a, tt)
 % finds the translation between two similar functions f0 and f1. The
 % translation is estimated with an accuracy given by thresh. The
 % interpolation of the signals is done using a Gaussian kernel of with a

@@ -213,19 +213,19 @@ hold on
 plot(dopp*skalf,'g');
 
 %%
-
-figure(4);
-imagesc
-
-
-%%
-
-[m,n]=size(im); 
-for i =1:m,
-    str = [];
-    for j = 1:n,
-        str = [str num2str(im(i,j))];
-    end
-        disp(str);
-end
+% 
+% figure(4);
+% imagesc
+% 
+% 
+% %%
+% 
+% [m,n]=size(im); 
+% for i =1:m,
+%     str = [];
+%     for j = 1:n,
+%         str = [str num2str(im(i,j))];
+%     end
+%         disp(str);
+% end
 
