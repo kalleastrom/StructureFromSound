@@ -1,3 +1,9 @@
+% Simulates a signal and a number of copies with translation and doppler
+% effect. Then computes the subsample translation and doppler variable for
+% each channel. Also computes the mean ("true") signal. Noise can be added.
+% Very similar to test3.m but with doppler effect added.
+% 2017-08-16
+
 % test 3 simply generates the function loaded by F0() and a translated copy
 % of it. It is possible to choose how many decimals the translation should
 % have. Then, noise can be added to thje signals (needs further
@@ -74,7 +80,7 @@ channels{1} = F0(x,a);
 nbr_decimals = 2; % how many decimals the translation should have
 true_translation = round(2*10^(nbr_decimals+1)*rand(1,nbr_channels-1))/10^(nbr_decimals) - 10;
 true_translation = [0 true_translation];
-true_translation = zeros(size(true_translation));
+% true_translation = zeros(size(true_translation));
 true_doppler = 1 + 0.01*randn(1,nbr_channels-1);
 true_doppler = [1 true_doppler];
 
@@ -89,10 +95,11 @@ for i = 2:nbr_channels
 end
 
 thresh = 10^(-8); % decides how good the translation estimation needs to be
-a = 10;
+a = 2;
 tt = [-15 15]; % the translations to be tried
-trans = zeros(nbr_channels,1);
 err = zeros(nbr_channels,1);
+z = zeros(2,nbr_channels);
+z(2,1) = 1;
 for i = 2:nbr_channels    
     [curr_z, curr_err] = find_translation_and_doppler(channels{1}, channels{i}, thresh, a, tt);
     z(:,i) = curr_z;
@@ -108,7 +115,7 @@ channels_mean = zeros(1,length(xmid));
 figure(2); clf; hold on;
 figure(3); clf; hold on;
 for i = 1:nbr_channels
-    channels_t{i} = interp1d(channels{i},xmid-trans(i),2);
+    channels_t{i} = interp1d(channels{i},z(2,i)*xmid+z(1,i),2);
 %     subplot(nbr_channels,1,i); plot(x,channels{i});
     figure(2); plot(xmid,channels{i}(xmid),'b');
     figure(3); plot(xmid,channels_t{i},'b');
@@ -123,5 +130,5 @@ title('The original signals and the computed mean')
 figure(3); plot(xmid,channels_mean,'r--'); hold off;
 title('The translated signals and the computed mean')
 
-[trans true_translation']
+[z(1,:)' true_translation']
 

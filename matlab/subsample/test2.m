@@ -1,3 +1,8 @@
+% Simulates a signal and a number of translated copies. Computes the 
+% subsample translation for each channel with a given number of decimals.
+% 2017-08-14
+
+
 % test 2 simply generates the function loaded by F0() and a translated copy
 % of it. It is possible to choose how many decimals the translation should
 % have. Then, noise can be added to thje signals (needs further

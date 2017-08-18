@@ -1,3 +1,8 @@
+% Very similar to test5.m, but instead of having all settings inside the
+% script the function estimate_trans_dopp_amp_std.m does the computations
+% and takes all settings in the paramter opts. 
+% See estimate_trans_dopp_amp_std for and test5.m further information.
+
 close all;
 
 % settings
@@ -6,10 +11,10 @@ opts.noise_std = 0.02;
 opts.signal_length = 1000;
 opts.a1 = 0;
 opts.a2 = 2;
-opts.N = 1000;
+opts.N = 1;
 opts.nbr_decimals = 2;
 opts.tt = [-20 20];
-plotopt = 0;
+plotopt = 1;
 
 out = estimate_trans_dopp_amp_std(opts,plotopt);
 err =out.all_z - repmat(out.true_z,[1 opts.N]);

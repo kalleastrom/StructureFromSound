@@ -6,11 +6,11 @@ close all;
 
 % settings
 opts.nbr_channels = 2;
-opts.noise_std = 0.01;
+opts.noise_std = 0.1;
 opts.signal_length = 1000;
 opts.a1 = 0;
 opts.a2 = 2;
-opts.N = 100;
+opts.N = 10;
 opts.nbr_decimals = 2;
 opts.tt = [-20 20];
 plotopt = 0;

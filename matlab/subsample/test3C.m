@@ -1,7 +1,17 @@
-% script to run the function estimate_trans_std_faster (essentially same as
-% test3B_estimate_std_in_translation_faster) for several different
-% settings. Add several for-loops etc to generate results and plot-
-
+% Runs essentially the same things as in the script
+% test3B_estimatie_std_in_translation_faster.m but uses the function
+% estimate_trans_std_faster. Runs that for different settings and uses
+% for-loops etc to generate results and plots. 
+% Performed plots:
+% - varies the blurring parameter a2 and plots the empirical and
+%   theoretical std (and confidence interval) as a function of a2 and the
+%   ratio of outliers as a function of a2
+% - varies the noise std and plots the estimated and true translation
+%   (keeps the true fixed) as a function of the noise std.
+%
+% obs! make sure that estimate_trans_std_faster.m uses find_translation.m
+% and not find_translation2.m (see linte 50-60 in estimate..)
+% 2017-08-15
 
 close all;
 
@@ -24,7 +34,7 @@ opts.tt = [-20 20]; % the translations to be tried. add in opts?
 
 % out = estimate_trans_std_faster(opts);
 
-many_a2 = linspace(0.3,5,48);
+many_a2 = linspace(0.3,5,25);
 all_est_trans_std = zeros(1,length(many_a2));
 all_th_trans_std = zeros(1,length(many_a2));
 

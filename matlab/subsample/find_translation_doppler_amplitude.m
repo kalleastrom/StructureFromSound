@@ -2,7 +2,7 @@ function [z0, err, f0t, f1t] = find_translation_doppler_amplitude(f0, f1, thresh
 % finds the translation, doppler and constant amplitude between two similar 
 % functions f0 and f1 (f1 wrt f0). The translation is estimated with an 
 % accuracy given by thresh. The interpolation of the signals is done using 
-% a Gaussian kernel of with std a and the initial translations search is 
+% a Gaussian kernel of with std a2 and the initial translations search is 
 % performed in the interval given by  tt=[minval,maxval]. The estimated 
 % translation, doppler and amplitude can be found in z0 and the 
 % corresponging error in err(end)
@@ -36,27 +36,30 @@ z0 =[tau;1;1]; % starting values of unknown paramters
 
 nbr_iter = 0;
 J = zeros(length(xmid),2);
-D = diag([1 1/1000 1/1000]); % obs! what is D?
+D = diag([5 1/1000 1]); % obs! what is D?
 while (err(end)>thresh) && (nbr_iter<20),
 %     tau0 = tau(end);
     f0t = interp1d(f0,xmid,a2);
     [f1t,f1td] = interp1d_with_derivative(f1,z0(2)*xmid+z0(1),a2); % obs! Where is the amplitude? 
     f1t = z0(3)*f1t; % add the amplitude
     f1td = z0(3)*f1td;
-    J(:,1) = f1td';
-    J(:,2) = (f1td.*xmid)';
-    J(:,3) = f1t'; % obsobs!
-    res = -(f0t'-f1t');
-    dz = -D*((J*D)\res);
+    J(:,1) = f1td'; % derivative wrt translation
+    J(:,2) = (f1td.*xmid)'; % derivative wrt doppler
+    J(:,3) = (f1t./z0(3))'; % derivative wrt amplitude
+%     res = -(f0t'-f1t');
+%     dz = -D*((J*D)\res);
+    res = (f0t'-f1t');
+    dz = D*((J*D)\res);
     if abs(dz(1))>1,
         dz = dz*(1/abs(dz(1)));
     end
     znew = z0+dz;
-    [f1tnew,~] = interp1d_with_derivative(f1,znew(2)*xmid+znew(1),a2); % obs! add paranthesis: znew(2)*(xmid+znew(1))?
-    [norm(res) norm(res+J*dz) norm(f0t-f1tnew)];
+    [f1tnew,~] = interp1d_with_derivative(f1,znew(2)*xmid+znew(1),a2);
+    f1tnew = znew(3)*f1tnew;
+    [norm(res) norm(res+J*dz) norm(f0t-f1tnew)]
     % if norm(resnew) > norm(res) d� minska steget.   
     z0 = znew;
-    % obs! can we asdd this since we know that the amplitude is positive?
+    % obs! can we add this since we know that the amplitude is positive?
     % does it help?
     if z0(3)<0 
         z0(3) =1;

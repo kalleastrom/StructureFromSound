@@ -1,3 +1,11 @@
+% Simulates a signal and a number of translated copies. Also adds Gaussian 
+% distributed noise to all channels (original as well, compared to 
+% test3.m). Computes the subsample translation for each channel with a 
+% given number of decimals. Also estimates the std of the translation 
+% empirically. 2017-08-14
+
+
+
 % test 3 simply generates the function loaded by F0() and a translated copy
 % of it. It is possible to choose how many decimals the translation should
 % have. Then, noise can be added to thje signals (needs further
@@ -131,5 +139,5 @@ end
 mean(all_trans)
 std(all_trans)
 true_translation(2)
-% formel för vad vi tror std ska bli
+% formel fï¿½r vad vi tror std ska bli
 

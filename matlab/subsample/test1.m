@@ -1,3 +1,8 @@
+% First test of subsample methods. Simulates a signal. Double checks that
+% the scale parameter works correcly. Then computes the integer
+% translation between two similar signals by discrete search. Interpolates
+% the signals but doesn't compute the subsample translation. 2017-08-14
+
 
 %% Test of subsample methods
 
@@ -85,7 +90,7 @@ end
 %delta_tau = ???
 
 %tao0 = tao0 + delta_tau;
-% iterera här för att minimera felet med avseende på tau0
+% iterera hï¿½r fï¿½r att minimera felet med avseende pï¿½ tau0
 
 errny1 = norm(f0(xmid)-f1t(xmid))
 errny2 = norm(f0t(xmid)-f1t(xmid))

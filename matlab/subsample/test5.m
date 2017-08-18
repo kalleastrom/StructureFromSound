@@ -1,6 +1,9 @@
 % test 5 simulates 2 channels and finds the translation,
 % doppler and a constant amplitude for the second channel (first used as 
-% reference). It works sometimes, but is not very robust.
+% reference). It works sometimes, but is not very robust. Especially the
+% amplitude estimation is bad.
+% 2017-08-16
+
 
 clear;
 close all;

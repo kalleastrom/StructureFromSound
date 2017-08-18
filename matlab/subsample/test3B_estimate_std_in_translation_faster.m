@@ -1,3 +1,11 @@
+% Simulates a signal and a number of translated copies. Also adds Gaussian 
+% distributed noise to all channels. Computes the subsample translation for
+% each channel with a given number of decimals. Also estimates the std of 
+% the translation. Similar to test3_estimate_std_in_translation_faster.m
+% but more organised. Prints the translation, translation std and noise std
+% (true and estimated) at the end. 2017-08-14
+
+
 % test 3B simply generates the function loaded by F0() and a translated copy
 % of it. It is possible to choose how many decimals the translation should
 % have. Then, noise can be added to thje signals (needs further
@@ -10,7 +18,7 @@
 % settings
 nbr_channels = 2;
 channels = cell(nbr_channels,1);
-noise_std = 3;
+noise_std = 0.03;
 x = 1:1000;
 a1 = 0; % Blurr 1
 a2 = 1.5; % Blurr 2 
@@ -86,18 +94,18 @@ for kk = 1:N;
 end
 toc
 
-% formel för vad vi tror std ska bli
+% formel fï¿½r vad vi tror std ska bli
 
 %% Estimate error, we first need \int (F')^2 dx
 
 xx = -15:15;
 gg = (-2*xx/(2*a2^2)).*(1/sqrt(2*pi*a2^2)).*exp( - (xx.^2)/(2*a2^2) );
 tmp = conv2(channels{1},gg,'same');
-% Gör det på medelvärdesbildningen
+% Gï¿½r det pï¿½ medelvï¿½rdesbildningen
 tmp = tmp(100+1:end-100);
 EA = 2*sum(tmp.^2);
 % re-estreck = 2*noise_std^2 * diskret deltafunction.
-% Re-esteck = 2*noise_std^2 * normalfördelad med std a*sqrt(2) ????
+% Re-esteck = 2*noise_std^2 * normalfï¿½rdelad med std a*sqrt(2) ????
 a22 = a2*sqrt(2);
 xx = -15:15;
 geestreck = 2*noise_std^2 * (1/sqrt(2*pi*a22^2)).*exp( - (xx.^2)/(2*a22^2) );
