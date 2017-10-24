@@ -46,7 +46,7 @@ while (err(end)>thresh) & (nbr_iter<10),
     dz = -D*((J*D)\res);
     znew = z0+dz;
     [f1tnew,~] = interp1d_with_derivative(f1,znew(2)*xmid+znew(1),a);
-    [norm(res) norm(res+J*dz) norm(f0t-f1tnew)]
+    [norm(res) norm(res+J*dz) norm(f0t-f1tnew)];
     % if norm(resnew) > norm(res) d� minska steget.   
     z0 = znew;
     % find a new tau

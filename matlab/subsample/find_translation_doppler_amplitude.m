@@ -35,9 +35,9 @@ z0 =[tau;1;1]; % starting values of unknown paramters
 %% Use interpolation and derivative to find correct value
 
 nbr_iter = 0;
-J = zeros(length(xmid),2);
-D = diag([5 1/1000 1]); % obs! what is D?
-while (err(end)>thresh) && (nbr_iter<20),
+J = zeros(length(xmid),3);
+D = diag([1 1/1000 1]); % obs! what is D?
+while (err(end)>thresh) && (nbr_iter<20)
 %     tau0 = tau(end);
     f0t = interp1d(f0,xmid,a2);
     [f1t,f1td] = interp1d_with_derivative(f1,z0(2)*xmid+z0(1),a2); % obs! Where is the amplitude? 
@@ -50,13 +50,15 @@ while (err(end)>thresh) && (nbr_iter<20),
 %     dz = -D*((J*D)\res);
     res = (f0t'-f1t');
     dz = D*((J*D)\res);
-    if abs(dz(1))>1,
+    if abs(dz(1))>1
         dz = dz*(1/abs(dz(1)));
     end
     znew = z0+dz;
     [f1tnew,~] = interp1d_with_derivative(f1,znew(2)*xmid+znew(1),a2);
     f1tnew = znew(3)*f1tnew;
+
     [norm(res) norm(res+J*dz) norm(f0t-f1tnew)];
+
     % if norm(resnew) > norm(res) d� minska steget.   
     z0 = znew;
     % obs! can we add this since we know that the amplitude is positive?
