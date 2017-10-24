@@ -1,5 +1,9 @@
 function out = estimate_trans_dopp_amp_std(opts,plotopt)
-% only works for 2 channels so far
+% only works for 2 channels so far. Simulates two similar sound channels
+% and then finds the translation, doppler and amplitude for the second
+% channel to be similar to the first. opts contains the settings and
+% signals and out contains the results. So far there is some problem with
+% the amplitude estimation in find_translation_doppler_amplitude.m
 
 % settings
 nbr_channels = opts.nbr_channels;

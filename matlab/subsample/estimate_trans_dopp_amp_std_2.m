@@ -1,6 +1,7 @@
 function out = estimate_trans_dopp_amp_std_2(opts,plotopt)
 % uses offset, in comparison to estimate_trans_dopp_amp_std.m
 % only works for 2 channels so far. Otherwise the functions are the same.
+% 2017-08-18
 
 %% settings
 nbr_channels = opts.nbr_channels;

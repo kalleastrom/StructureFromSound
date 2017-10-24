@@ -48,7 +48,7 @@ for kk = 1:N;
     trans = zeros(nbr_channels,1);
     err = zeros(nbr_channels,1);
     for i = 2:nbr_channels
-        if 0,
+        if 1,
             % Version 1
             [curr_trans, curr_err] = find_translation(channels{1}, channels{i}, thresh, a2, tt);
         else

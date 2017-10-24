@@ -56,7 +56,7 @@ while (err(end)>thresh) && (nbr_iter<20),
     znew = z0+dz;
     [f1tnew,~] = interp1d_with_derivative(f1,znew(2)*xmid+znew(1),a2);
     f1tnew = znew(3)*f1tnew;
-    [norm(res) norm(res+J*dz) norm(f0t-f1tnew)]
+    [norm(res) norm(res+J*dz) norm(f0t-f1tnew)];
     % if norm(resnew) > norm(res) d� minska steget.   
     z0 = znew;
     % obs! can we add this since we know that the amplitude is positive?

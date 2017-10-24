@@ -1,3 +1,10 @@
+% Simulates a signal and a number of translated copies. Also adds Gaussian 
+% distributed noise to all channels. Computes the subsample translation for 
+% each channel with a given number of decimals. Also estimates the std of 
+% the translation, both empirically and using thoretical formulas. 
+% 2017-08-14
+
+
 % test 3 simply generates the function loaded by F0() and a translated copy
 % of it. It is possible to choose how many decimals the translation should
 % have. Then, noise can be added to thje signals (needs further
@@ -135,18 +142,18 @@ end
 mean(all_trans)
 true_translation(2)
 std(all_trans)
-% formel för vad vi tror std ska bli
+% formel fï¿½r vad vi tror std ska bli
 
 %% Estimate error, we first need \int (F')^2 dx
 
 xx = -15:15;
 gg = (-2*xx/(2*a^2)).*(1/sqrt(2*pi*a^2)).*exp( - (xx.^2)/(2*a^2) );
 tmp = conv2(channels{1},gg,'same');
-% Gör det på medelvärdesbildningen
+% Gï¿½r det pï¿½ medelvï¿½rdesbildningen
 tmp = tmp(100:1900);
 EA = 2*sum(tmp.^2);
 % re-estreck = 2*noise_std^2 * diskret deltafunction.
-% Re-esteck = 2*noise_std^2 * normalfördelad med std a*sqrt(2) ????
+% Re-esteck = 2*noise_std^2 * normalfï¿½rdelad med std a*sqrt(2) ????
 a22 = a2*sqrt(2);
 xx = -15:15;
 geestreck = 2*noise_std^2 * (1/sqrt(2*pi*a22^2)).*exp( - (xx.^2)/(2*a22^2) );
